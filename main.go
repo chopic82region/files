@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"time"
+	"sync"
 )
 
 type emptyStruct struct{}
@@ -21,15 +21,27 @@ func main(){
 
 }	
 
-func mergeChannels (ch ... chan interface{}) <- chan interface{}{
-	mergedCannel := make(<- chan interface{})
+func mergeChannels (ch... chan interface{}) chan interface{}{
+	out := make(chan interface{})
+
+	wg := sync.WaitGroup{}
+
+	for i := range ch{
+		wg.Add(1)
+		
+		go func(){
+			defer wg.Done()
+			for v := range i{
+				out <- v
+			}
+		}()
+	}
 
 	go func(){
-		select{
-		case <- time.After(5*time.Second):
-			fmt.Println("time out")
-		}
+		wg.Wait()
+		close(out)
 	}()
 	
-	return mergedCannel
+	
+	return out
 }
