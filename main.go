@@ -1,12 +1,28 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sync"
+)
 
 func main(){
 	count := 10
+	wg := sync.WaitGroup{}
 
-	for i := range count{
-		fmt.Println("hello world", i)
-	}		
-		
+	wg.Add(count)
+	go func(){
+	
+		for i := range count{
+			defer wg.Done()
+			fmt.Println("hello world", i)
+		}
+	}()
+
+
+	wg.Wait()
+
+	fmt.Println("end")
+	
+
+
 }	
