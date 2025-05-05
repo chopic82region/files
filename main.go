@@ -9,6 +9,7 @@ func main(){
 	count := 10
 	wg := sync.WaitGroup{}
 
+	// какой то код
 	wg.Add(count)
 	go func(){
 	
