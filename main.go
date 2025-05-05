@@ -3,5 +3,10 @@ package main
 import "fmt"
 
 func main(){
-	fmt.Println("hello world")
-}
+	count := 10
+
+	for i := range count{
+		fmt.Println("hello world", i)
+	}		
+		
+}	
